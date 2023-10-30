@@ -14,22 +14,30 @@ target=" "
 while getopts 'cfst:p:' opt
 do 
 case $opt in
-    c) echo "calibration requested"
-       calib_req=1
-       ;;
-    f) echo "flashing firmware requested" 
-       flash_req=1
-       ;;
-    s) echo "set up configuration resquested" 
-       config_req=1
-       ;;
-    t) echo "targets $OPTARG" 
-       targets=$OPTARG
-       ;;
-    p) echo "pi3hat trasnport requested with $OPTARG"
-       transport=$OPTARG
-       trans_req=1
-       ;;
+    c) 
+        echo "calibration requested"
+        echo " "
+        calib_req=1
+        ;;
+    f) 
+        echo "flashing firmware requested" 
+        flash_req=1
+        ;;
+    s)  echo "set up configuration resquested" 
+        echo " "
+        config_req=1
+        ;;
+    t)
+        echo "targets $OPTARG" 
+        echo " "
+        targets=$OPTARG
+        ;;
+    p) 
+        echo "pi3hat trasnport requested with $OPTARG"
+        echo " "
+        transport=$OPTARG
+        trans_req=1
+        ;;
 esac
 done
 
@@ -84,10 +92,17 @@ if [ $flash_req == 1 ]; then
     version="${fw_v[$choise]}"
     cd $version
     elf_name=(*)
-    echo "$elf_name"
-    echo "python3 -m moteus.moteus_tool --target $targets $elf_name"
-    python3 ../../prova.py -target $targets $elf_name
     cd ../..
+    command_req="python3 -m moteus.moteus_tool --target $targets --flash $elf_name"
+     
+    if [ $trans_req == 1 ]; then
+        python3 prova.py --target $targets --flash $elf_name --pi3hat-cfg $transport
+    else 
+        python3 prova.py --target $targets --flash $elf_name
+    fi
+    echo "$command_req"
+    
+    
     
 fi
 
@@ -116,17 +131,29 @@ if [ $config_req == 1 ]; then
             exit 1
         fi
     fi
-    version="${fw_v[$choise]}"
-    cfg_name=(*)
-    echo "$cfg_name"
-    echo "$transport"
-    echo "python3 -m moteus.moteus_tool --target $targets $cfg_name -pi3hat-cfg $transport"
+    cfg_name="${cfg_v[$choise]}"
     cd ..
-    python3 prova.py -target $targets $cfg_name -pi3hat-cfg $transport
+    ls
+    command_req="python3 -m moteus.moteus_tool --target $targets --write-config $cfg_name"
+    
+    if [ $trans_req == 1 ]; then
+        command_req+=" --pi3hat-cfg $transport"
+        python3 prova.py --target $targets --write-config $cfg_name --pi3hat-cfg $transport
+    else    
+        python3 prova.py --target $targets --write-config $cfg_name
+    fi
+    echo "$command_req"
+    
 fi
 
-if [ $config_req == 1 ]; then 
-    echo "python3 -m moteus.moteus_tool --target $targets $cfg_name -pi3hat-cfg $transport --calibrate"
-    
-    python3 prova.py -target $targets $cfg_name -pi3hat-cfg $transport --calibrate
+if [ $calib_req == 1 ]; then 
+    command_req="python3 -m moteus.moteus_tool --target $targets --calibrate"
+    if [ $trans_req == 1 ]; then
+        command_req+=" --pi3hat-cfg $transport"
+        python3 prova.py --target $targets --calibrate --pi3hat-cfg $transport
+    else
+        python3 prova.py --target $targets --calibrate
+
+    fi
+    echo "$command_req"
 fi
