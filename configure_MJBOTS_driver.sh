@@ -8,7 +8,7 @@ config_req=0
 flash_req=0
 trans_req=0
 transport=" "
-target=" "
+targets=" "
 
 # get options
 while getopts 'cfst:p:' opt
@@ -45,16 +45,17 @@ done
 echo "are you sure about options?[y/n]"
 read sure
 
-if [ "$sure" == "n" ]; then
+if [ "$sure" = "n" ]; then
     echo "interrupt script"
     exit 0
 fi
-if [ "$targets" = " " ]; then
+echo "targets are $targets"
+if [ "$targets" =  " " ]; then
     echo "ERROR no target provided"
     exit 1
 fi
-if [ $trans_req == 1 ]; then
-    if [ "$transport" == " " ]; then
+if [ $trans_req = 1 ]; then
+    if [ "$transport" = " " ]; then
         echo "ERROR pi3hat config syntax not correct"
         exit 1
     fi    
@@ -62,11 +63,11 @@ fi
 
 
 declare -i ind=0
-declare -i choise
+ 
 
 #manage firmware flash
-if [ $flash_req == 1 ]; then
-    cd Firmware_Version
+if [ $flash_req = 1 ]; then
+    cd Firmware_version
     fw_v=()
     for ver in *
     do
@@ -93,20 +94,17 @@ if [ $flash_req == 1 ]; then
     cd $version
     elf_name=(*)
     cd ../..
-    command_req="python3 -m moteus.moteus_tool --target $targets --flash $elf_name"
-     
+    command_req="python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name"
+    ls
     if [ $trans_req == 1 ]; then
-        python3 prova.py --target $targets --flash $elf_name --pi3hat-cfg $transport
+        python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name --pi3hat-cfg $transport
     else 
-        python3 prova.py --target $targets --flash $elf_name
+        python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name
     fi
-    echo "$command_req"
-    
-    
-    
+    echo "$command_req"  
 fi
 
-if [ $config_req == 1 ]; then
+if [ $config_req = 1 ]; then
     cd Configuration_FIle
     ind=0
     cfg_v=()
@@ -122,37 +120,36 @@ if [ $config_req == 1 ]; then
     echo ""
     if [ $choise -lt 0 ] ;
     then 
-        echo "index out of range"
+        echo "index $choise out of range >0"
         exit 1
     else
         if [ $choise -gt $ind ];
         then 
-            echo "index out of range"
+            echo "index $choise out of range < $ind"
             exit 1
         fi
     fi
     cfg_name="${cfg_v[$choise]}"
     cd ..
-    ls
     command_req="python3 -m moteus.moteus_tool --target $targets --write-config $cfg_name"
     
-    if [ $trans_req == 1 ]; then
+    if [ $trans_req = 1 ]; then
         command_req+=" --pi3hat-cfg $transport"
-        python3 prova.py --target $targets --write-config $cfg_name --pi3hat-cfg $transport
+        python3 -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name --pi3hat-cfg $transport
     else    
-        python3 prova.py --target $targets --write-config $cfg_name
+        python3 -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name
     fi
     echo "$command_req"
     
 fi
 
-if [ $calib_req == 1 ]; then 
+if [ $calib_req = 1 ]; then 
     command_req="python3 -m moteus.moteus_tool --target $targets --calibrate"
-    if [ $trans_req == 1 ]; then
+    if [ $trans_req = 1 ]; then
         command_req+=" --pi3hat-cfg $transport"
-        python3 prova.py --target $targets --calibrate --pi3hat-cfg $transport
+        python3 -m moteus.moteus_tool --target $targets --calibrate --pi3hat-cfg $transport
     else
-        python3 prova.py --target $targets --calibrate
+        python3 -m moteus.moteus_tool --target $targets --calibrate
 
     fi
     echo "$command_req"
