@@ -7,13 +7,19 @@ calib_req=0
 config_req=0
 flash_req=0
 trans_req=0
+info_req=0
 transport=" "
 targets=" "
 
 # get options
-while getopts 'cfst:p:' opt
+while getopts 'icfst:p:' opt
 do 
 case $opt in
+    i)
+        echo "info requested"
+        echo " "
+        info_req=1
+        ;;
     c) 
         echo "calibration requested"
         echo " "
@@ -63,6 +69,15 @@ fi
 
 
 declare -i ind=0
+#manage info request
+if [$info_req = 1]; then
+
+    if [ $trans_req == 1 ]; then
+        python3 -m moteus.moteus_tool --target $targets --info  --pi3hat-cfg $transport
+    else 
+        python3 -m moteus.moteus_tool --target $targets --info
+    fi
+fi
  
 
 #manage firmware flash

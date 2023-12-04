@@ -5,6 +5,7 @@ This repository provide a bash script to execute the basic operation to use a MJ
   <li> Flash the Driver Firmware</li>
   <li> Set up the Driver configuration file</li>
   <li> Calibrate the driver</li>
+  <li> Get Information about each driver  </li>
 </ol>
 
 ## Firmware Version and Configuration File
@@ -18,4 +19,5 @@ Open a terminal in the repository's folder and call the bash script **bash confi
   <li> Flash option is enable by using the option -f without arguments and will schedule the flashing process into the script. The user can choose the desired version between the provided ones</li>
   <li> Configuration option is enable by using the option -s without arguments, it will schedule the configuretion process into the script.The user can choose the desired configuration file between the provided ones  </li>
   <li>Flash option is enable by using the option -c without arguments and will schedule the calibration process into the script.</li>
+  <li>Info option is enable by using the option -i without arguments and will schedule the calibration process into the script.</li>
 </ul>
