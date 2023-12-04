@@ -10,9 +10,10 @@ trans_req=0
 info_req=0
 transport=" "
 targets=" "
+python_int="_"
 
 # get options
-while getopts 'icfst:p:' opt
+while getopts 'icfst:p:v:' opt
 do 
 case $opt in
     i)
@@ -44,6 +45,13 @@ case $opt in
         transport=$OPTARG
         trans_req=1
         ;;
+    v)
+        echo "python interpreter chose is $OPTARG"
+        echo " "
+        python_int=$OPTARG;
+        
+
+        ;;
 esac
 done
 
@@ -66,16 +74,18 @@ if [ $trans_req = 1 ]; then
         exit 1
     fi    
 fi
-
+if [ $python_int = "_" ];then
+    python_int="python3"
+fi
 
 declare -i ind=0
 #manage info request
-if [$info_req = 1]; then
+if [ $info_req = 1 ]; then
 
     if [ $trans_req == 1 ]; then
-        python3 -m moteus.moteus_tool --target $targets --info  --pi3hat-cfg $transport
+        $python_int -m moteus.moteus_tool --target $targets --info  --pi3hat-cfg $transport
     else 
-        python3 -m moteus.moteus_tool --target $targets --info
+        $python_int -m moteus.moteus_tool --target $targets --info
     fi
 fi
  
@@ -112,9 +122,9 @@ if [ $flash_req = 1 ]; then
     command_req="python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name"
     ls
     if [ $trans_req == 1 ]; then
-        python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name --pi3hat-cfg $transport
+        $python_int -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name --pi3hat-cfg $transport
     else 
-        python3 -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name
+        $python_int -m moteus.moteus_tool --target $targets --flash Firmware_version/$version/$elf_name
     fi
     echo "$command_req"  
 fi
@@ -150,9 +160,9 @@ if [ $config_req = 1 ]; then
     
     if [ $trans_req = 1 ]; then
         command_req+=" --pi3hat-cfg $transport"
-        python3 -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name --pi3hat-cfg $transport
+        $python_int -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name --pi3hat-cfg $transport
     else    
-        python3 -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name
+        $python_int -m moteus.moteus_tool --target $targets --write-config Configuration_FIle/$cfg_name
     fi
     echo "$command_req"
     
@@ -162,9 +172,9 @@ if [ $calib_req = 1 ]; then
     command_req="python3 -m moteus.moteus_tool --target $targets --calibrate"
     if [ $trans_req = 1 ]; then
         command_req+=" --pi3hat-cfg $transport"
-        python3 -m moteus.moteus_tool --target $targets --calibrate --pi3hat-cfg $transport
+        $python_int -m moteus.moteus_tool --target $targets --calibrate --pi3hat-cfg $transport
     else
-        python3 -m moteus.moteus_tool --target $targets --calibrate
+        $python_int -m moteus.moteus_tool --target $targets --calibrate
 
     fi
     echo "$command_req"

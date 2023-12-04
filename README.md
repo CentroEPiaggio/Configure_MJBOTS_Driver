@@ -6,6 +6,8 @@ This repository provide a bash script to execute the basic operation to use a MJ
   <li> Set up the Driver configuration file</li>
   <li> Calibrate the driver</li>
   <li> Get Information about each driver  </li>
+  <li> Set Python Interpreter  </li>
+  <li> Set Transport Pi3Hat  </li>
 </ol>
 
 ## Firmware Version and Configuration File
@@ -16,6 +18,7 @@ The **Configuration_FIle** folder contains the different configuration file. Eac
 Open a terminal in the repository's folder and call the bash script **bash configure_MJBOTS_driver.sh [- opt arg]**. the options are:
 <ul>
   <li>targets option is necessary to choose the targets of the disired operation, the option is -t followed by the list of ids delimited by ','. For example if the target motor have ids 1,2,3 the option syntax is -t 1,2,3</li>
+  <li>transport option is necessary to choose the bus and the connected driver id of the disired operation, the option is -p followed by the list the list of channel sperated by ";", each channel is -bus_id-=-list of id separeted by ','- . For example if the bus are 1 and 2 are connect with motors having respectively ids 1,2,3 and 4,5,6 the option syntax is -p 1=1,2,3;2=4,5,6</li>
   <li> Flash option is enable by using the option -f without arguments and will schedule the flashing process into the script. The user can choose the desired version between the provided ones</li>
   <li> Configuration option is enable by using the option -s without arguments, it will schedule the configuretion process into the script.The user can choose the desired configuration file between the provided ones  </li>
   <li>Flash option is enable by using the option -c without arguments and will schedule the calibration process into the script.</li>
