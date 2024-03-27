@@ -31,8 +31,26 @@ Open a terminal in the repository's folder and call the bash script **sudo bash 
 
 ### Info Request to motor  with Pi3hat on channel 
 
-sudo bash configure_MJBOTS_driver.sh -t <-motor id-> - p "<-pi3hat-bus->=<-motor id->" -v ../mul_env/bin/python3 - i
+```sudo bash configure_MJBOTS_driver.sh -t <-motor id-> -p "<-pi3hat-bus->=<-motor id->" -v ../mul_env/bin/python3 -i```
+
+For instance, if we want to send info request to a kinematic chain composed by 3 motor, with id 4,5 and 6, connected to the bus 1 then the command is:
+
+```sudo bash configure_MJBOTS_driver.sh -t 4,5,6 -p "1=4,5,6" -v ../mul_env/bin/python3 -i```
+
+if we immagine to add another 2 motor kinematic chain, with id 8,9, to the bus 2:
+
+```sudo bash configure_MJBOTS_driver.sh -t 4,5,6,8,9 -p "1=4,5,6;2=8,9" -v ../mul_env/bin/python3 -i```
+
 
 ### MJBOT driver complete set up
 
-sudo bash configure_MJBOTS_driver.sh -t <-motor id-> - p "<-pi3hat-bus->=<-motor id->" -v ../mul_env/bin/python3 -c -i -f
+```sudo bash configure_MJBOTS_driver.sh -t <-motor id-> -p "<-pi3hat-bus->=<-motor id->" -v ../mul_env/bin/python3 -c -s -f```
+
+For instance, if we want to send info request to a kinematic chain composed by 3 motor, with id 4,5 and 6, connected to the bus 1 then the command is:
+
+```sudo bash configure_MJBOTS_driver.sh -t 4,5,6 -p "1=4,5,6" -v ../mul_env/bin/python3  -c -s -f```
+
+if we immagine to add another 2 motor kinematic chain, with id 8,9, to the bus 2:
+
+```sudo bash configure_MJBOTS_driver.sh -t 4,5,6,8,9 -p "1=4,5,6;2=8,9" -v ../mul_env/bin/python3 -c -s -f```
+
